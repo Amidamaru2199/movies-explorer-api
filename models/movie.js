@@ -10,10 +10,10 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  /*duration: {
+  duration: {
     type: Number,
     required: true,
-  },*/
+  },
   year: {
     type: String,
     required: true,
@@ -30,30 +30,31 @@ const movieSchema = new mongoose.Schema({
       message: 'Поле "image" должно быть валидным URL-адресом',
     },
   },
-  /*trailerLink: {
+  trailerLink: {
     type: String,
     required: true,
     validate: {
       validator: (v) => isURL(v),
       message: 'Поле "trailerLink" должно быть валидным URL-адресом',
     },
-  },*/
-  /*thumbnail: {
+  },
+  thumbnail: {
     type: String,
     required: true,
     validate: {
       validator: (v) => isURL(v),
       message: 'Поле "thumbnail" должно быть валидным URL-адресом',
     },
-  },*/
-  /*owner: {
+  },
+  owner: {
+    ref: 'user',
     type: mongoose.Types.ObjectId,
     required: true,
   },
   movieId: {
-    type: mongoose.Types.ObjectId,
+    type: Number,
     required: true,
-  },*/
+  },
   nameRU: {
     type: String,
     required: true,
