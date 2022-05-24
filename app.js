@@ -43,6 +43,7 @@ app.post(
   loginUser,
 );
 app.use(auth);
+
 app.use('/', userRouter);
 app.use('/', movieRouter);
 
