@@ -3,10 +3,11 @@ const jwt = require('jsonwebtoken'); // импортируем модуль json
 const User = require('../models/user');
 const NotFoundError = require('../errors/NotFoundError');
 const BadRquestError = require('../errors/BadRequestError');
+const DublicateError = require('../errors/DublicateError');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-exports.createUser = (req, res) => {
+exports.createUser = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
     .then((passwordHash) => User.create({
       name: req.body.name,
@@ -14,10 +15,17 @@ exports.createUser = (req, res) => {
       password: passwordHash,
     }))
     .then((user) => res.send(user))
-    .catch((err) => res.status(400).send(err));
+    .catch((err) => {
+      console.log(err);
+      if (err.name === 'ValidationError') {
+        next(new BadRquestError('Переданы некорректные данные при создании пользователя'));
+      } else if (err.code === 11000) {
+        next(new DublicateError('Пользователь с таким "email" уже существует'));
+      }
+    });
 };
 
-exports.getUserById = (req, res) => {
+exports.getUserById = (req, res, next) => {
   const userId = req.user && req.user._id;
 
   User.findById(userId)
@@ -28,7 +36,13 @@ exports.getUserById = (req, res) => {
         res.send(user);
       }
     })
-    .catch((err) => res.status(err.statusCode).send(err));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BadRquestError('Не валидный id'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 exports.updateUser = (req, res, next) => {
@@ -52,7 +66,7 @@ exports.updateUser = (req, res, next) => {
     });
 };
 
-exports.loginUser = (req, res) => {
+exports.loginUser = (req, res, next) => {
   const { email, password } = req.body;
 
   User.findOne({ email })
@@ -77,6 +91,7 @@ exports.loginUser = (req, res) => {
       res.send({ token });
     })
     .catch((err) => {
-      res.status(400).send({ message: err.message });
+      console.log(err);
+      next(new DublicateError(err.message));
     });
 };
