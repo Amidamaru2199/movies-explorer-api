@@ -14,7 +14,7 @@ exports.createUser = (req, res) => {
       password: passwordHash,
     }))
     .then((user) => res.send(user))
-    .catch((err) => res.status(400).send(err));
+    .catch((err) => console.log(err));
 };
 
 exports.getUserById = (req, res) => {
