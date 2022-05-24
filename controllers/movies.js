@@ -18,13 +18,13 @@ exports.deleteMovieById = (req, res) => {
   //const { id: movieId } = req.params;
   const userId = req.user && req.user._id;
 
-  Movie.findById(req.params.movieId)
+  Movie.findById(req.params._id)
     .then((movie) => {
       if (!movie) {
         throw new NotFoundError('Карточка с указанным _id не найдена');
       }
       if (String(movie.owner) === userId) {
-        return Movie.findByIdAndRemove(req.params.movieId).then(() => {
+        return Movie.findByIdAndRemove(req.params._id).then(() => {
           res.send({ message: 'Фильм удален' });
         });
       }
