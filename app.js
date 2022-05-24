@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 
-app.post('/test', createUser);
+app.post('/signup', createUser);
 app.post('/signin', loginUser);
 app.use(auth);
 app.use('/', userRouter);
