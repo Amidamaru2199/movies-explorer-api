@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { celebrate, Joi, errors } = require('celebrate');
 const cors = require('cors');
-const movieRouter = require('./routes/movies');
-const userRouter = require('./routes/users');
+const Routers = require('./routes/index');
 const { createUser, loginUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/NotFoundError');
@@ -27,7 +26,7 @@ app.post(
     body: Joi.object().keys({
       email: Joi.string().required().email(),
       password: Joi.string().required(),
-      name: Joi.string().min(2).max(30),
+      name: Joi.string().min(2).max(30).required(),
     }),
   }),
   createUser,
@@ -44,8 +43,7 @@ app.post(
 );
 app.use(auth);
 
-app.use('/', userRouter);
-app.use('/', movieRouter);
+app.use('/', Routers);
 
 app.use((req, res, next) => {
   next(new NotFoundError('Маршрут не найден'));

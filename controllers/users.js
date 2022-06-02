@@ -14,7 +14,10 @@ exports.createUser = (req, res, next) => {
       email: req.body.email,
       password: passwordHash,
     }))
-    .then((user) => res.send(user))
+    .then((user) => res.send({
+      name: user.name,
+      email: user.email,
+    }))
     .catch((err) => {
       console.log(err);
       if (err.name === 'ValidationError') {
@@ -60,8 +63,8 @@ exports.updateUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRquestError('Переданы некорректные данные при обновлении пользователя'));
-      } else {
-        next(err);
+      } else if (err.code === 11000) {
+        next(new DublicateError('Пользователь с таким "email" уже существует'));
       }
     });
 };
