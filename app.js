@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -9,11 +10,11 @@ const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/NotFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/Logger');
 
-const { PORT = 3001 } = process.env;
+const LOCAL_DB_URL = 'mongodb://localhost:27017/bitfilmsdb';
+const { PORT = 3001, DB_URL = LOCAL_DB_URL } = process.env;
 
 const app = express();
 
-// mongoose.connect('mongodb://localhost:27017/bitfilmsdb');
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -70,7 +71,7 @@ app.use((err, req, res, next) => {
 
 (async function () {
   try {
-    await mongoose.connect('mongodb://localhost:27017/bitfilmsdb');
+    await mongoose.connect(DB_URL);
     app.listen(PORT, () => {
       console.log(`Server started on ${PORT} port`);
     });
