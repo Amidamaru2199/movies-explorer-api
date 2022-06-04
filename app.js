@@ -45,8 +45,8 @@ app.post(
 );
 app.use(auth);
 
-app.use('/', movieRouter);
 app.use('/', userRouter);
+app.use('/', movieRouter);
 
 app.use((req, res, next) => {
   next(new NotFoundError('Маршрут не найден'));
