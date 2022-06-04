@@ -12,7 +12,7 @@ const NotFoundError = require('./errors/NotFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/Logger');
 
 const LOCAL_DB_URL = 'mongodb://localhost:27017/bitfilmsdb';
-const { PORT = 3001, DB_URL = LOCAL_DB_URL } = process.env;
+const { PORT = 3001 } = process.env;
 
 const app = express();
 
@@ -73,7 +73,7 @@ app.use((err, req, res, next) => {
 
 (async function () {
   try {
-    await mongoose.connect(DB_URL);
+    await mongoose.connect(LOCAL_DB_URL);
     app.listen(PORT, () => {
       console.log(`Server started on ${PORT} port`);
     });

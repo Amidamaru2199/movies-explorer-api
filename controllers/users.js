@@ -6,7 +6,6 @@ const BadRquestError = require('../errors/BadRequestError');
 const DublicateError = require('../errors/DublicateError');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
-console.log('user', NODE_ENV, JWT_SECRET);
 
 exports.createUser = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
