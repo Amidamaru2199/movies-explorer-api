@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { celebrate, Joi, errors } = require('celebrate');
 const cors = require('cors');
-const Routers = require('./routes/index');
+const movieRouter = require('./routes/movies');
+const userRouter = require('./routes/users');
 const { createUser, loginUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/NotFoundError');
@@ -44,7 +45,8 @@ app.post(
 );
 app.use(auth);
 
-app.use('/', Routers);
+app.use('/', movieRouter);
+app.use('/', userRouter);
 
 app.use((req, res, next) => {
   next(new NotFoundError('Маршрут не найден'));
