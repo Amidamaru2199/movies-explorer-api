@@ -24,6 +24,8 @@ exports.createUser = (req, res, next) => {
         next(new BadRquestError('Переданы некорректные данные при создании пользователя'));
       } else if (err.code === 11000) {
         next(new DublicateError('Пользователь с таким "email" уже существует'));
+      } else {
+        next(err);
       }
     });
 };
@@ -65,6 +67,8 @@ exports.updateUser = (req, res, next) => {
         next(new BadRquestError('Переданы некорректные данные при обновлении пользователя'));
       } else if (err.code === 11000) {
         next(new DublicateError('Пользователь с таким "email" уже существует'));
+      } else {
+        next(err);
       }
     });
 };
@@ -94,7 +98,6 @@ exports.loginUser = (req, res, next) => {
       res.send({ token });
     })
     .catch((err) => {
-      console.log(err);
       next(new DublicateError(err.message));
     });
 };
